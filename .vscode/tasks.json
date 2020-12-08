@@ -1,0 +1,22 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Build Debug nim_test01.nim",
+			"type": "shell",
+			"command": "nim ./nim_test01/build.nims",
+			"group": "build",
+			"problemMatcher": []
+		},
+		{
+			"label": "Build Debug nim_test04.nim",
+			"type": "shell",
+			"command": "nim ./nim_test04/build.nims",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"problemMatcher": []
+		}
+	],
+}

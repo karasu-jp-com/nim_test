@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>WebAssemblyのテスト02(再)</title>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+	// JabvaScriptの関数
+	function ThisIsJSFunc() {
+		return "JavaScriptのメッセージ";
+	}
+
+	var Module = {
+		"noInitialRun": true ,
+		"onRuntimeInitialized": () => { Module.ccall("func01", ""); } ,
+	};
+</script>
+</head>
+
+<body>
+    <div id="output1"></div>
+	<script src="nim_test04.js"></script>
+</body>
+</html>
