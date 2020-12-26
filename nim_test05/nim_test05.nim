@@ -18,26 +18,26 @@ const RTLD_NOW      = 2
 
 type TypeSubModule = proc(msg:cstring):bool {.cdecl.}
 
-echo "Tes05 START Version0006"
+echo "Tes05 START Version0009"
 
-#var handle = dlopen("nim_test05_sub01.so", RTLD_NOW)
-#if handle == nil:
-#  echo "dlopen Fault."
-#  echo dlerror()
-#  quit(QuitFailure)
-#else:
-#  echo "dlopen Success."
+var handle = dlopen("nim_test05_sub01.so", RTLD_NOW)
+if handle == nil:
+  echo "dlopen Fault."
+  echo dlerror()
+  quit(QuitFailure)
+else:
+  echo "dlopen Success."
 
-#var subModule = cast[TypeSubModule](dlsym(handle, "subModule"))
-#if subModule == nil:
-#  echo "dlsym Fault."
-#  echo dlerror()
-#  quit(QuitFailure)
-#else:
-#  echo "dlsym Success."
-#
-#echo subModule("KANI")
+var subModule = cast[TypeSubModule](dlsym(handle, "subModule"))
+if subModule == nil:
+  echo "dlsym Fault."
+  echo dlerror()
+  quit(QuitFailure)
+else:
+  echo "dlsym Success."
 
-#discard dlclose(handle)
+echo subModule("KANI")
+
+discard dlclose(handle)
 
 echo "Tes05 END"
