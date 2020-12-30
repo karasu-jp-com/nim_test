@@ -2,5 +2,6 @@
 /bin
 /test/nim_test04.js
 /test/nim_test05.js
+/test/nim_test05.data
 /test/*.wasm
 /nim_test05/preload/*
