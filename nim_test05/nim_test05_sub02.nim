@@ -7,5 +7,5 @@ proc subModule*(msg:cstring):bool {.cdecl,exportc.} =
     NimMain()
     isInitial = true
 
-  echo "Message from sub01:", msg
+  echo "Message from sub02:", msg
   return true
