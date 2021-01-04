@@ -9,12 +9,17 @@
 	window.onload = function(){
 		console.log("window.onload");
 		worker = new Worker("nim_test05_worker.js");
+		worker.onmessage = function(e) {
+			eval(e.data);
+		};
+		worker.postMessage(0);
 	}
 </script>
 
 </head>
 <body>
 <!--	<script src="nim_test05.js"></script>-->
-<div id="output"></div>
+<div id="output1"></div>
+<div id="output2"></div>
 </body>
 </html>
