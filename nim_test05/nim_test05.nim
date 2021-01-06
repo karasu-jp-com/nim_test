@@ -1,3 +1,5 @@
+import os
+
 proc dlopen(filename:cstring, flag:int):pointer {.header: "<dlfcn.h>",importc.}
 proc dlsym(handle:pointer, symbol:cstring):pointer {.header: "<dlfcn.h>",importc.}
 proc dlerror():cstring {.header: "<dlfcn.h>",importc.}
@@ -34,9 +36,26 @@ proc DoSubModule(name:string, msg:string) {.discardable.} =
   discard dlclose(handle)
 
 #######################################
+# ListFile
+#######################################
+proc ListFile() {.discardable.} =
+  for f in walkDir("/"):
+    echo f.path
+
+#######################################
+# WriteFile
+#######################################
+proc WriteFile() {.discardable.} =
+  let f:File = open("Test.xxx", FileMode.write)
+  defer:
+    f.close
+
+#######################################
 # main
 #######################################
 echo "Test05 START"
+
+ListFile()
 
 DoSubModule "nim_test05_sub01.so", "KANI"
 DoSubModule "nim_test05_sub02.so", "TAKO"
