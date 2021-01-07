@@ -46,14 +46,17 @@ proc ListFile() {.discardable.} =
 # WriteFile
 #######################################
 proc WriteFile() {.discardable.} =
-  let f:File = open("Test.xxx", FileMode.write)
+  let f:File = open("Test.xxx", FileMode.fmWrite)
   defer:
     f.close
+  f.write("AIUEO KAKIKUKEO")
 
 #######################################
 # main
 #######################################
 echo "Test05 START"
+
+WriteFile()
 
 ListFile()
 
