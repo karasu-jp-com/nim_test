@@ -58,15 +58,15 @@ proc WriteFile() {.discardable.} =
 proc LoadData(module:string) {.discardable.} =
   emscripten_async_wget_data("nim_test05_sub01.wasm"
   , proc(data: pointer, sz: cint) =
-      echo "emscripten_async_wget_data Success."
+    echo "emscripten_async_wget_data Success."
   , proc() =
-      echo "emscripten_async_wget_data Falt."
+    echo "emscripten_async_wget_data Falt."
+  )
 
 #######################################
 # main
 #######################################
 echo "Test05 START"
-
 
 #WriteFile()
 
