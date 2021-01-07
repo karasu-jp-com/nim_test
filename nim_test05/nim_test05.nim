@@ -1,4 +1,5 @@
 import os
+import jsbind/emscripten
 
 proc dlopen(filename:cstring, flag:int):pointer {.header: "<dlfcn.h>",importc.}
 proc dlsym(handle:pointer, symbol:cstring):pointer {.header: "<dlfcn.h>",importc.}
@@ -52,15 +53,26 @@ proc WriteFile() {.discardable.} =
   f.write("AIUEO KAKIKUKEO")
 
 #######################################
+# LoadData
+#######################################
+proc LoadData(module:string) {.discardable.} =
+  emscripten_async_wget_data("nim_test05_sub01.wasm"
+  , proc(data: pointer, sz: cint) =
+      echo "emscripten_async_wget_data Success."
+  , proc() =
+      echo "emscripten_async_wget_data Falt."
+
+#######################################
 # main
 #######################################
 echo "Test05 START"
 
-WriteFile()
+
+#WriteFile()
 
 ListFile()
 
-DoSubModule "nim_test05_sub01.so", "KANI"
-DoSubModule "nim_test05_sub02.so", "TAKO"
+#DoSubModule "nim_test05_sub01.so", "KANI"
+#DoSubModule "nim_test05_sub02.so", "TAKO"
 
 echo "Tes05 END"
