@@ -12,6 +12,22 @@ const RTLD_NOW      = 2
 #const RTLD_GLOBAL   = 256
 #const RTLD_LOCAL    = 0
 
+type Promise = ref object
+  func_then : proc(p: Promise)
+  func_type: int8
+
+proc newPromise(f:proc(p: Promise)): Promise =
+  var p = new Promise
+  p.func_then = null
+  f(p)
+  return p
+
+proc then(p: Promise, f:proc(p: Promise)): Promise =
+  p.func_then = f
+
+proc reject(p: Promise) =
+  discard
+
 #######################################
 # DoSubModule
 #######################################
@@ -56,7 +72,8 @@ proc WriteFile() {.discardable.} =
 # LoadData
 #######################################
 proc LoadData(module:string) {.discardable.} =
-  emscripten_async_wget_data("nim_test05_sub01.wasm"
+  emscripten_async_wget_data(
+    module
   , proc(data: pointer, sz: cint) =
     echo "emscripten_async_wget_data Success."
   , proc() =
@@ -70,6 +87,7 @@ echo "Test05 START"
 
 #WriteFile()
 
+LoadData("nim_test05_sub01.wasm")
 ListFile()
 
 #DoSubModule "nim_test05_sub01.so", "KANI"
