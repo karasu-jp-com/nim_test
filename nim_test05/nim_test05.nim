@@ -1,4 +1,3 @@
-import os
 import jsbind/emscripten
 
 proc dlopen(filename:cstring, flag:int):pointer {.header: "<dlfcn.h>",importc.}
