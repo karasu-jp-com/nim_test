@@ -13,20 +13,34 @@ const RTLD_NOW      = 2
 #const RTLD_LOCAL    = 0
 
 type Promise = ref object
-  func_then : proc(p: Promise)
-  func_type: int8
+  mIsFault: bool
+  mProc : proc(p:Promise) or proc(p:Promise, e:system.Exception)
+  mNextP: Promise
 
-proc newPromise(f:proc(p: Promise)): Promise =
-  var p = new Promise
-  p.func_then = null
+proc newPromise(f:proc(p:Promise)): Promise =
+  let p = Promise(mIsFault:false, mProc:f, mNextP:nil)
   f(p)
   return p
 
-proc then(p: Promise, f:proc(p: Promise)): Promise =
-  p.func_then = f
+proc then(p:Promise, f:proc(p:Promise)): Promise =
+  p.mNextP = Promise(mIsFault:false, mProc:f, mNextP:nil)
+  return p.mNextP
 
-proc reject(p: Promise) =
-  discard
+proc catch(p:Promise, f:proc(p:Promise, e:system.Exception)): Promise =
+  p.mNextP = Promise(mIsFault:true, mProc:f, mNextP:nil)
+  return p.mNextP
+
+proc resolve(p:Promise) =
+  if p.mNextP != nil and not(p.mNextP.mIsFault):
+    p.mNextP.mProc(p.mNextP)
+
+proc reject(p:Promise, e:Exception) =
+  var errP = p.mNextP
+  while not(errP.mIsFault):
+    errP
+
+  if p.mNextP != nil and not(p.mNextP.mIsFault):
+    p.mNextP.mProc(p.mNextP)
 
 #######################################
 # DoSubModule
@@ -87,8 +101,18 @@ echo "Test05 START"
 
 #WriteFile()
 
-LoadData("nim_test05_sub01.wasm")
-ListFile()
+discard newPromise(proc(p:Promise) =
+
+  emscripten_async_wget_data("nim_test05_sub01.wasm"
+  , proc(data: pointer, sz: cint) =
+    echo "emscripten_async_wget_data Success."
+    p.reject
+  , nil)
+).then(proc(p:Promise) =
+
+  ListFile()
+)
+
 
 #DoSubModule "nim_test05_sub01.so", "KANI"
 #DoSubModule "nim_test05_sub02.so", "TAKO"
