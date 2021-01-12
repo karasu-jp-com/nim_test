@@ -1,7 +1,3 @@
-#import os
-import jsbind/emscripten
-import promise
-
 proc dlopen(filename:cstring, flag:int):pointer {.header: "<dlfcn.h>",importc.}
 proc dlsym(handle:pointer, symbol:cstring):pointer {.header: "<dlfcn.h>",importc.}
 proc dlerror():cstring {.header: "<dlfcn.h>",importc.}
@@ -37,47 +33,14 @@ proc DoSubModule(module:string, msg:string) {.discardable.} =
 
   discard dlclose(handle)
 
-#######################################
-# LoadSubModule
-#######################################
-proc LoadSubModule(p:Promise, module:string, msg:string) =
-  emscripten_async_wget_data(module
-  , proc(data: pointer, sz: cint) =
-    echo "emscripten_async_wget_data Success. " & module
-
-    let f:File = open(module, FileMode.fmWrite)
-    defer:
-      f.close
-    discard f.writeBuffer(data, sz)
-
-    DoSubModule(module, msg)
-
-    p.resolve
-  , proc() =
-    p.reject Exception(msg:"emscripten_async_wget_data Fault. " & module)
-  )
 
 #######################################
 # main
 #######################################
-discard newPromise(proc(p:Promise) =
-  echo "Test05 START"
+echo "Test05 START"
 
-  p.LoadSubModule("nim_test05_sub01.wasm", "KANI")
+DoSubModule("nim_test05_sub01.so", "KANI")
 
-).then(proc(p:Promise) =
-  p.LoadSubModule("nim_test05_sub02.wasm", "TAKO")
+DoSubModule("nim_test05_sub02.so", "TAKO")
 
-#).then(proc(p:Promise) =
-#  for f in walkDir("/"):
-#    echo f.path
-#
-#  p.resolve
-#
-).catch(proc(p:Promise, e:Exception) =
-  echo e.msg
-  p.final
-
-).then(proc(p:Promise) =
-  echo "Tes05 END"
-)
+echo "Tes05 END"
