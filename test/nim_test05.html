@@ -4,10 +4,21 @@
 <meta charset="UTF-8">
 <title>WebAssemblyのテスト05</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+	var worker;
+	window.onload = function(){
+		//console.log("window.onload");
+		worker = new Worker("nim_test05_worker.js");
+		worker.onmessage = function(e) {
+			eval(e.data);
+		};
+		worker.postMessage(0);
+	}
+</script>
 
 </head>
 <body>
-<script src="nim_test05.js"></script>
+<!--	<script src="nim_test05.js"></script>-->
 <div id="output1"></div>
 <div id="output2"></div>
 </body>
