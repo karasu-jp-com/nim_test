@@ -9,8 +9,8 @@ proc subModule*(msg:cstring):bool {.cdecl,exportc.} =
     NimMain()
     isInitial = true
 
-  emscripten_run_script("$('#output1').html('Message from sub01:" & $msg & "');" &
-  "$('#output1').css('background-color','green');")
+  emscripten_run_script("postMessage(\"$('#output1').html('Message from sub01:" & $msg & "');" &
+  "$('#output1').css('background-color','green');\")")
 
   echo("Message from sub01:" & $msg)
   return true

@@ -30,7 +30,6 @@ proc DoSubModule(module:string, msg:string) {.discardable.} =
 #    echo "dlsym Success."
 
   discard subModule(msg)
-
   discard dlclose(handle)
 
 
@@ -40,7 +39,6 @@ proc DoSubModule(module:string, msg:string) {.discardable.} =
 echo "Test05 START"
 
 DoSubModule("nim_test05_sub01.so", "KANI")
-
 DoSubModule("nim_test05_sub02.so", "TAKO")
 
 echo "Tes05 END"
