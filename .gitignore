@@ -1,5 +1,6 @@
-/cache
-/bin
+/cache/*
+/bin/*
+/bk
 /test/nim_test04.js
 /test/nim_test05.js
 /test/nim_test05.data
